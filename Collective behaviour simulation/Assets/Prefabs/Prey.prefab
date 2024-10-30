@@ -213,16 +213,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   separationRadius: 2
   alignmentRadius: 15
-  attractionRadius: 50
+  attractionRadius: 80
   separationForceMultiplier: 5
   alignmentForceMultiplier: 1
-  attractionForceMultiplier: 0.5
+  attractionForceMultiplier: 0.8
   frictionCoefficient: 0.1
+  preyDiameter: 0.5
   beta: 1
-  beta_escape: 2
+  beta_escape: 20
   alpha: 0.1
   gamma: 0.1
-  rotationSpeed: 1
   preyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -244,9 +244,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.01
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}

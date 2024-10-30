@@ -1,30 +1,26 @@
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor.Build.Content;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PreyAgent : MonoBehaviour
 {
     // Prey parameters
     public float separationRadius = 2.0f;
-    public float alignmentRadius = 5.0f;
-    public float attractionRadius = 10.0f;
-    public float separationForceMultiplier = 1.5f;
+    public float alignmentRadius = 15.0f;
+    public float attractionRadius = 80.0f;
+    public float separationForceMultiplier = 5.0f;
     public float alignmentForceMultiplier = 1.0f;
     public float attractionForceMultiplier = 0.5f;
     public float frictionCoefficient = 0.1f;
+    public float preyDiameter = 0.5f;
 
     public float beta = 1.0f;
-    public float beta_escape = 2.0f;
+    public float beta_escape = 20.0f;
     public float alpha = 0.1f;
     public float gamma = 0.1f;
-
-    public float rotationSpeed = 1.0f;
 
     public LayerMask preyLayer;
     public LayerMask predatorLayer;
     
-    // Movement states
     private Rigidbody rb;
 
     void Start()
@@ -60,10 +56,9 @@ public class PreyAgent : MonoBehaviour
         {
             if (prey.gameObject != gameObject) // Avoid self
             {
-                // Pairwise separation force according to article. In place where -2*sepRadius it should be sum of separation radius
-                // for both agents, but because this radius is equal for all prey it is just 2x.
-                Vector3 difference = prey.transform.position - transform.position;
-                separation += difference.normalized * (difference.magnitude - 2 * separationRadius);
+                // Pairwise separation force according to article.
+                Vector3 difference = transform.position - prey.transform.position;
+                separation += difference.normalized * (difference.magnitude - 2 * preyDiameter);
             }
         }
         separation.z = 0;
@@ -135,7 +130,8 @@ public class PreyAgent : MonoBehaviour
             Vector3 escapeDirection = Vector3.zero;
             foreach (Collider predator in nearbyPredators)
             {
-                escapeDirection += (transform.position - predator.transform.position);
+                Vector3 direction = transform.position - predator.transform.position;
+                escapeDirection += direction.normalized / direction.magnitude;
             }
             
             propulsion = (beta_escape - gamma * rb.velocity.magnitude*rb.velocity.magnitude)*escapeDirection.normalized;
